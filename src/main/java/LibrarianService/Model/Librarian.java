@@ -1,83 +1,50 @@
 package LibrarianService.Model;
 
+import java.sql.Connection;
 import java.util.List;
 
 import core.model.Employee;
+import core.model.EmployeeType;
+import core.model.Gender;
+import core.model.Role;
+import core.model.User;
 import LibrarianService.Book;
 
 public class Librarian extends Employee {
-    
-    private int id;
-    private String name;
-    private String email;
-    private List<Book> books;
-    private String attribute;
 
-    public Librarian(int id, String name, String email, List<Book> books, String attribute){
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.books = books;
-        this.attribute = attribute;
+
+    public Librarian(int id, String email, String password, String name, String surname,
+                     String phoneNumber, Gender gender, Role role, int salary, EmployeeType type) {
+        super(id, email, password, name, surname, phoneNumber, gender, role, salary, type);
     }
 
-    public Librarian(){
-
-    }
-    
-    public int getId() {
-        return this.id;
-    }
-    
-    public void setId(int id) {
-        this.id = id;
+    public Librarian() {
+        super();
     }
 
-    public String getName() {
-        return this.name;
+    public Librarian(User user, Connection connection) {
+        super(user, 0, EmployeeType.LIBRARIAN, connection);
     }
     
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public void addBook(Book book) {
+    //     this.books.add(book);
+    // }
     
-    public String getEmail() {
-        return this.email;
-    }
+    // public void removeBook(Book book) {
+    //     this.books.remove(book);
+    // }
     
-    public void setEmail(String email) {
-        this.email = email;
+    // public List<Book> viewAvailableBooks() {
+    //     return this.books;
+    // }
+
+    public void getBook () {
+
     }
-    
-    public List<Book> getBooks() {
-        return this.books;
-    }
-    
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-    
-    public String getAttribute() {
-        return this.attribute;
-    }
-    
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-    
-    public void addBook(Book book) {
-        this.books.add(book);
-    }
-    
-    public void removeBook(Book book) {
-        this.books.remove(book);
-    }
-    
-    public List<Book> viewAvailableBooks() {
-        return this.books;
-    }
-    
-    public boolean giveBook(Book book) {
-        return false;
+
+    @Override
+    public void run() {
+        System.out.println("Librarian is running");
+        System.out.println(this.toString());
     }
 }

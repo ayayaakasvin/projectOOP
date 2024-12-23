@@ -22,4 +22,12 @@ public class Paper {
     public void setAuthor(User author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "Paper{" +
+                "content='" + content + '\'' +
+                ", author=" + author +
+                '}';
+    }
 }

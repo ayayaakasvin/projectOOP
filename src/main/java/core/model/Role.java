@@ -1,5 +1,5 @@
 package core.model;
 
 public enum Role {
-	STUDENT, EMPLOYEE;
+	STUDENT, TEACHER, LIBRARIAN, MANAGER, ADMIN;
 }

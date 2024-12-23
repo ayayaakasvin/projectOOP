@@ -1,16 +1,64 @@
 package StudentService.Model;
 
 import ResearcherService.Model.*;
+import core.model.Gender;
+import core.model.Role;
 import core.model.User;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Student extends User {
     
     private String faculty;
     private int yearOfStudy;
     private String member;
-    
+    private int totalCredits;
+    private double gpa;
+
+
     private Researcher researcherInstance;
+
+    public Student(Connection connection, User user) throws SQLException {
+        super(user);
+        String query = "SELECT * FROM students WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, super.getId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    this.faculty = resultSet.getString("major");
+                    this.yearOfStudy = resultSet.getInt("year");
+                    this.member = resultSet.getString("membership");
+                    this.totalCredits = resultSet.getInt("total_credits");
+                    this.gpa = resultSet.getDouble("gpa");
+                }
+            }
+        }
+
+        // Check if the student is also a researcher
+        String researcherQuery = "SELECT * FROM researchers WHERE user_id = ?";
+        try (PreparedStatement researcherStatement = connection.prepareStatement(researcherQuery)) {
+            researcherStatement.setInt(1, super.getId());
+            try (ResultSet researcherResultSet = researcherStatement.executeQuery()) {
+                if (researcherResultSet.next()) {
+                    this.researcherInstance = new Researcher(
+                        researcherResultSet.getInt("id")
+                    );
+                }
+            }
+        }
+    }
     
+    public Student(int id, String email, String password, String firstName, String lastName, String phone, Gender gender, Role role, String faculty, int yearOfStudy, String member, int totalCredits, double gpa) {
+        super(id, email, password, firstName, lastName, phone, gender, role);
+        this.faculty = faculty;
+        this.yearOfStudy = yearOfStudy;
+        this.member = member;
+        this.totalCredits = totalCredits;
+        this.gpa = gpa;
+    }
+
     public String getFaculty() {
         return this.faculty;
     }
@@ -41,49 +89,49 @@ public class Student extends User {
     
     public void setResearcherInstance(Researcher researcherInstance) {
         this.researcherInstance = researcherInstance;
-    }                         
-    
-    public void register() {
-        System.out.println("Студент зарегистрирован.");
     }
     
-    public String getTeacherInfo() {
-        return "Информация о преподавателе";
+    public int getTotalCredits() {
+        return this.totalCredits;
     }
-    
-    public void viewTranscript() {
-        System.out.println("Транскрипт просмотрен.");
+
+    public void setTotalCredits(int totalCredits) {
+        this.totalCredits = totalCredits;
     }
-    
-    public void viewFinancialInfo() {
-        System.out.println("Финансовая информация просмотрена.");
+
+    public double getGpa() {
+        return gpa;
     }
-    
-    public void rateTeacher() {
-        System.out.println("Преподаватель оценен.");
+
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
     }
-    
-    public void toRequest() {
-        System.out.println("Запрос отправлен.");
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + getId() +
+                ", email='" + getEmail() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", phoneNumber='" + getPhoneNumber() + '\'' +
+                ", faculty='" + faculty + '\'' +
+                ", yearOfStudy=" + yearOfStudy +
+                ", member='" + member + '\'' +
+                ", totalCredits=" + totalCredits +
+                ", gpa=" + gpa +
+                ", researcherInstance=" + (researcherInstance != null ? researcherInstance.toString() : "null") +
+                '}';
     }
-    
-    public void viewSchedules() {
-        System.out.println("Расписание просмотрено.");
+
+    @Override
+    public void run() {
+        System.out.println("Student is running");
+        System.out.println(this.toString());
     }
-    
-    public void FXRegister() {
-        System.out.println("FX регистрация выполнена.");
+
+    public void viewMarks(int courseID) {
+        System.out.println("Student marks");
     }
-    
-    public void willBeAssistent() {
-        System.out.println("Студент стал ассистентом.");
-    }
-    
-    public void viewFiles() {
-        System.out.println("Файлы просмотрены.");
-    }
-    
-    public void viewExamSchedule() {
-        System.out.println("Расписание экзаменов просмотрено.");
-    }
+    // things with marks, attendance, schedules and researches, a lot time to implement
 }

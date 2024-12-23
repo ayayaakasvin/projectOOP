@@ -1,37 +1,39 @@
 package core.model;
 
-public class User {
+public abstract class User implements RunInterface {
 
     private int id;
     private String email;
     private String password;
-    private String personAllInfo;
     private String name;
     private String surname;
     private String phoneNumber;
     private Gender gender; 
-    private String familyStatus;
     private Role role;
-    private boolean isAdmin;
-    private String msgController;
     
     public User() {
+
     }
 
-    public User(int id, String email, String password, String personAllInfo, String name, String surname,
-                String phoneNumber, Gender gender, String familyStatus, Role role, boolean isAdmin, String msgController) {
+    public User(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.phoneNumber = user.getPhoneNumber();
+    }
+    
+    public User(int id, String email, String password, String name, String surname,
+                String phoneNumber, Gender gender, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.personAllInfo = personAllInfo;
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.familyStatus = familyStatus;
         this.role = role;
-        this.isAdmin = isAdmin;
-        this.msgController = msgController;
     }
 
     public int getId() {
@@ -56,14 +58,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPersonAllInfo() {
-        return personAllInfo;
-    }
-
-    public void setPersonAllInfo(String personAllInfo) {
-        this.personAllInfo = personAllInfo;
     }
 
     public String getName() {
@@ -98,14 +92,6 @@ public class User {
         this.gender = gender;
     }
 
-    public String getFamilyStatus() {
-        return familyStatus;
-    }
-
-    public void setFamilyStatus(String familyStatus) {
-        this.familyStatus = familyStatus;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -113,23 +99,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
-    public String getMsgController() {
-        return msgController;
-    }
-
-    public void setMsgController(String msgController) {
-        this.msgController = msgController;
-    }
-
 
     public boolean signin(String email, String password) {
         return this.email.equals(email) && this.password.equals(password);
@@ -143,10 +112,12 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender + '\'' +
-                ", familyStatus='" + familyStatus + '\'' +
                 ", role='" + role + '\'' +
-                ", isAdmin=" + isAdmin +
-                ", msgController='" + msgController + '\'' +
                 '}';
+    }
+
+    @Override
+    public void run() {
+        System.out.println("User is running, but type is not specified");
     }
 }
